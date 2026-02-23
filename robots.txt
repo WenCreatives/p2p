@@ -1,0 +1,24 @@
+# robots.txt for jordanmwinukatz P2P Trading
+
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /cache/
+Disallow: /uploads/
+Disallow: /jordan/
+Disallow: /*.php$
+Disallow: /verify_email.html
+Disallow: /reset_password.html
+
+# Allow important pages
+Allow: /index.html
+Allow: /dist/
+Allow: /js/
+
+# Sitemap location
+Sitemap: https://jordanmwinukatz.com/sitemap.xml
+
+# Crawl delay (optional - adjust as needed)
+Crawl-delay: 1
+

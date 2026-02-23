@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jordanmwinukatz P2P Trading</title>
+    
+    <!-- Resource hints for faster CDN loading -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://unpkg.com">
+    <link rel="dns-prefetch" href="https://embed.tawk.to">
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="https://unpkg.com/react@18/umd/react.production.min.js" as="script" crossorigin>
+    <link rel="preload" href="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" as="script" crossorigin>
+    <link rel="preload" href="dist/app.js" as="script">
+    <link rel="preload" href="dist/styles.css" as="style">
+    
+    <!-- Optimized Tailwind CSS - pre-built and minified -->
+    <link rel="stylesheet" href="dist/styles.css">
+    
+    <!-- Font Awesome for social media icons - load async to not block rendering -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer"></noscript>
+    
+    <!-- React and ReactDOM - using production builds for faster loading (critical, load first) -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    
+    <!-- Analytics tracking - load async to not block rendering -->
+    <script>
+      // cache-busting version for static assets
+      window.__assetVersion = Date.now();
+      (function() {
+        var a = document.createElement('script');
+        a.src = 'js/analytics.js?v=' + window.__assetVersion;
+        a.async = true;
+        document.head.appendChild(a);
+        var s = document.createElement('script');
+        s.src = 'js/submissions.js?v=' + window.__assetVersion;
+        s.async = true;
+        document.head.appendChild(s);
+      })();
+    </script>
+    
+</head>
+<body>
+    <div id="root">
+        <div style="display: flex; align-items: center; justify-content: center; min-height: 100vh; background: #0b0b0c;">
+            <div style="text-align: center;">
+                <div style="border: 4px solid #fbbf24; border-top-color: transparent; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin: 0 auto;"></div>
+                <p style="color: #fbbf24; margin-top: 20px; font-size: 18px;">Loading...</p>
+            </div>
+        </div>
+    </div>
+    <style>
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+    
+    <!-- Pre-compiled React app (no Babel needed in browser) -->
+    <script src="dist/app.js?v=<?php echo time(); ?>"></script>
+    
+    <!--Start of Tawk.to Script - Lazy load after page is interactive -->
+    <script type="text/javascript">
+    // Lazy load Tawk.to widget after page is fully loaded
+    function loadTawkTo() {
+      if (window.Tawk_API && window.Tawk_API.maximize) {
+        return; // Already loaded
+      }
+      var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+      (function(){
+      var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+      s1.async=true;
+      s1.src='https://embed.tawk.to/690b94b14ce1bb195944f32d/1j9ajplr5';
+      s1.charset='UTF-8';
+      s1.setAttribute('crossorigin','*');
+      s0.parentNode.insertBefore(s1,s0);
+      })();
+    }
+    // Load Tawk.to after page is interactive (but with a delay to prioritize main content)
+    if (document.readyState === 'complete') {
+      setTimeout(loadTawkTo, 3000); // Wait 3 seconds after page load
+    } else {
+      window.addEventListener('load', function() {
+        setTimeout(loadTawkTo, 3000); // Wait 3 seconds after page load
+      });
+    }
+    </script>
+    <!--End of Tawk.to Script-->
+</body>
+</html>

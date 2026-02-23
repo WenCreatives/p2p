@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Seller Payout</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg1: #1a1a1a;
+      --bg2: #262626;
+      --bg3: #404040;
+      --gold: #facc15;
+      --blue-label: #3b82f6;
+      --white: #ffffff;
+      --green: #22c55e;
+    }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: radial-gradient(circle at top, var(--bg1) 0%, var(--bg2) 40%, var(--bg3) 90%);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      color: #fff;
+    }
+    .card {
+      border-radius: 20px;
+      padding: 40px;
+      width: min(540px, 100%);
+      background: linear-gradient(135deg, #2d2d2d 0%, #3a3a3a 40%, #1f1f1f 100%);
+      box-shadow: 0 0 50px rgba(212, 175, 55, 0.6);
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      backdrop-filter: blur(10px);
+      transition: 0.3s ease;
+    }
+    .step-title {
+      font-size: 2rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, #facc15, #fbbf24, #f59e0b);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 20px;
+    }
+    .step-desc {
+      color: #d1d5db;
+      margin-bottom: 32px;
+      font-size: 1.05rem;
+    }
+    p {
+      margin: 0 0 10px;
+      font-size: 1rem;
+    }
+    .blue-label {
+      color: var(--blue-label);
+      font-weight: 600;
+    }
+    .value {
+      color: var(--white);
+      font-weight: 500;
+    }
+    .value-amount {
+      color: var(--green);
+      font-weight: 600;
+    }
+    .green-amount {
+      color: var(--green);
+      font-weight: 600;
+    }
+    .btn {
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: 0.2s;
+    }
+    .btn-gold {
+      background: linear-gradient(90deg, #facc15, #fbbf24);
+      border: none;
+      color: #1a1a1a;
+      box-shadow: 0 8px 25px rgba(251, 191, 36, 0.45);
+    }
+    .btn-gold:hover {
+      background: linear-gradient(90deg, #fbbf24, #f59e0b);
+    }
+    .btn-green {
+      background: #22c55e;
+      border: none;
+      color: #fff;
+      box-shadow: 0 8px 25px rgba(34, 197, 94, 0.45);
+    }
+    .btn-green:hover {
+      background: #16a34a;
+    }
+    .btn-secondary {
+      background: rgba(45, 45, 45, 0.8);
+      border: 1px solid rgba(250, 204, 21, 0.3);
+      color: #f5f5f5;
+    }
+    .copy-btn {
+      background: rgba(64, 64, 64, 0.7);
+      border: 1px solid rgba(250, 204, 21, 0.4);
+      color: #fde68a;
+      padding: 4px 12px;
+      border-radius: 7px;
+      font-size: 0.7rem;
+      cursor: pointer;
+      margin-left: 8px;
+    }
+    .status-banner {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(250, 204, 21, 0.25);
+      border-radius: 12px;
+      padding: 10px 16px;
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 20px;
+    }
+    .status-error {
+      background: rgba(127, 29, 29, 0.35);
+      border-color: rgba(248, 113, 113, 0.4);
+      color: #fecaca;
+    }
+    .hidden {
+      display: none !important;
+    }
+    .proof-section {
+      margin-top: 18px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(250, 204, 21, 0.15);
+    }
+    .proof-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .proof-thumb {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(250, 204, 21, 0.4);
+      box-shadow: 0 10px 18px rgba(0, 0, 0, 0.45);
+    }
+    .proof-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    .proof-thumb:hover img {
+      transform: scale(1.05);
+    }
+    .proof-thumb span {
+      position: absolute;
+      bottom: 6px;
+      right: 8px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(0, 0, 0, 0.65);
+      color: #fde68a;
+      font-size: 0.75rem;
+      letter-spacing: 0.5px;
+    }
+    #step2 {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="card" id="step1">
+    <h1 class="step-title">Confirm Seller Transfer</h1>
+    <p class="step-desc">Verify that the seller’s crypto was received successfully before proceeding with payment.</p>
+    <div id="status" class="status-banner">Loading order details…</div>
+    <p><span class="blue-label">Order #:</span> <span id="order-number" class="value">—</span></p>
+    <p><span class="blue-label">Seller:</span> <span id="seller-name" class="value">—</span></p>
+    <p><span class="blue-label">Platform:</span> <span id="platform-name" class="value">—</span></p>
+    <p><span class="blue-label">Recipient Email:</span> <span id="recipient-email" class="value">—</span></p>
+    <p><span class="blue-label">Recipient UID:</span> <span id="recipient-uid" class="value">—</span></p>
+    <p><span class="blue-label">Amount Sent:</span> <span id="crypto-amount" class="value-amount">—</span></p>
+    <div id="proof-section" class="proof-section hidden">
+      <p><span class="blue-label">Proof Attachments:</span> <span id="proof-count" class="value">0</span></p>
+      <div id="proof-grid" class="proof-grid"></div>
+    </div>
+    <button class="btn btn-gold" id="next-btn" onclick="goToStep2()">✅ Confirm & Continue</button>
+  </div>
+
+  <div class="card" id="step2">
+    <h1 class="step-title">Pay the Seller</h1>
+    <p class="step-desc">Send the payment to the seller’s account and mark the order as complete after transfer.</p>
+    <p><span class="blue-label">Payout Channel:</span> <span id="payout-channel" class="value">—</span></p>
+    <p><span class="blue-label">Payout Name:</span> <span id="pay-name" class="value">—</span>
+      <button class="copy-btn" data-copy="pay-name">Copy</button></p>
+    <p><span class="blue-label">Account Number:</span> <span id="pay-number" class="value">—</span>
+      <button class="copy-btn" data-copy="pay-number">Copy</button></p>
+    <p><span class="blue-label">Amount to Pay:</span> <span id="pay-amount" class="value">—</span>
+      <button class="copy-btn" data-copy="pay-amount">Copy</button></p>
+    <div style="display:flex;gap:10px;margin-top:24px;" id="actions-row">
+      <button class="btn btn-green" id="complete-btn" onclick="completeOrder(this)">✅ Mark Payout Done</button>
+      <button class="btn btn-secondary" onclick="backToStep1()">Back</button>
+    </div>
+  </div>
+
+  <script>
+    const state = {
+      submissionId: null,
+      submission: null,
+      readonly: false
+    };
+
+    function getCachedSubmission(id) {
+      try {
+        if (id) {
+          const raw = localStorage.getItem(`submission-preview-${id}`);
+          if (raw) {
+            return { id, data: JSON.parse(raw) };
+          }
+        }
+        const latestRaw = localStorage.getItem('submission-preview-latest');
+        if (latestRaw) {
+          const parsed = JSON.parse(latestRaw);
+          if (parsed && typeof parsed === "object") {
+            return parsed;
+          }
+        }
+      } catch (err) {
+        console.warn("Failed to read cached submission", err);
+      }
+      return null;
+    }
+
+    function setStatus(message, isError = false) {
+      const statusEl = document.getElementById("status");
+      if (!statusEl) return;
+      statusEl.textContent = message;
+      statusEl.classList.toggle("status-error", isError);
+      statusEl.classList.toggle("hidden", !message);
+    }
+
+    function setText(id, value, fallback = "—") {
+      const el = document.getElementById(id);
+      if (el) {
+        el.textContent = value || fallback;
+      }
+    }
+
+    function goToStep2() {
+      if (state.readonly) return;
+      document.getElementById("step1").style.display = "none";
+      document.getElementById("step2").style.display = "block";
+    }
+    function backToStep1() {
+      document.getElementById("step2").style.display = "none";
+      document.getElementById("step1").style.display = "block";
+    }
+    function copyField(id, btn) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const text = el.textContent.trim();
+      if (!text || text === "—") {
+        alert("No data available to copy yet.");
+        return;
+      }
+      navigator.clipboard.writeText(text).then(() => {
+        if (btn) {
+        const old = btn.innerText;
+        btn.innerText = "Copied!";
+        setTimeout(() => (btn.innerText = old), 1000);
+        }
+      }).catch(() => alert("Failed to copy."));
+    }
+    async function completeOrder(btn) {
+      if (state.readonly) {
+        alert("This order is archived and cannot be modified.");
+        return;
+      }
+      if (!state.submissionId) {
+        alert("Missing submission context.");
+        return;
+      }
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = "Marking...";
+      }
+      try {
+        const res = await fetch("./api/submissions.php", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "mark_completed", submission_id: state.submissionId })
+        });
+        const data = await res.json();
+        if (!data.success) {
+          throw new Error(data.error || "Failed to mark order completed");
+        }
+        alert("✅ Seller payout recorded.");
+        window.location.href = "admin/completed_orders.php";
+      } catch (error) {
+        console.error(error);
+        alert("Error marking payout completed: " + error.message);
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = "✅ Mark Payout Done";
+        }
+      }
+    }
+
+    document.querySelectorAll("[data-copy]").forEach((btn) => {
+      btn.addEventListener("click", () => copyField(btn.getAttribute("data-copy"), btn));
+    });
+
+    async function loadSubmission() {
+      const params = new URLSearchParams(window.location.search);
+      let id = params.get("id");
+      const cached = getCachedSubmission(id || undefined);
+      if (params.has("readonly")) {
+        state.readonly = params.get("readonly") !== "0";
+      }
+      if (!id && cached) {
+        id = cached.id;
+      }
+      if (!id) {
+        setStatus("Missing submission id in URL and no cached data available.", true);
+        return;
+      }
+      state.submissionId = id;
+      try {
+        const res = await fetch(`./api/submissions.php?action=get_submission&id=${encodeURIComponent(id)}`);
+        if (!res.ok) throw new Error(`Request failed (${res.status})`);
+        const data = await res.json();
+        if (!data.success || !data.submission) throw new Error(data.error || "Submission not found");
+        state.submission = data.submission;
+        populateSubmission(data.submission);
+        setStatus("");
+        if (state.readonly) {
+          setStatus("Viewing completed order (read only).");
+          applyReadonlyMode();
+        }
+      } catch (err) {
+        console.error(err);
+        if (cached && cached.data) {
+          setStatus(state.readonly ? "Showing completed order (cached data)." : "Showing cached submission data (live fetch failed).");
+          state.submission = cached.data;
+          populateSubmission(cached.data);
+          if (state.readonly) {
+            applyReadonlyMode();
+          }
+        } else {
+          setStatus(`Failed to load submission: ${err.message}`, true);
+        }
+      }
+    }
+
+    function populateSubmission(submission) {
+      const form = submission.form_data || {};
+      const user = submission.user_info || {};
+      const orderNumber = submission.order_number || submission.id;
+
+      setText("order-number", orderNumber);
+      setText("seller-name", user.name || form.name || "—");
+      setText("platform-name", form.platform || form.exchange || form.platform_name || "—");
+      
+      // Recipient details (where seller sent USDT to) - these are the platform recipient details
+      // For Binance, the recipient details are hardcoded in the frontend
+      const platform = (form.platform || form.exchange || form.platform_name || "").toLowerCase();
+      
+      // Default recipient details for Binance (matches WIZARD_SELL_RECEIVE_MAP in dist/app.js)
+      let recipientEmail = "jordanmwinuka@protonmail.com";
+      let recipientUid = "36847668";
+      
+      // You can add mappings for other platforms here if needed in the future
+      // if (platform.includes("bitget")) { ... }
+      // if (platform.includes("bybit")) { ... }
+      
+      setText("recipient-email", recipientEmail);
+      setText("recipient-uid", recipientUid);
+      
+      const cryptoSent = form.amount_usdt ?? form.cryptoAmount ?? form.amountCrypto ?? form.usdt ?? form.amount;
+      setText("crypto-amount", cryptoSent ? `${cryptoSent} ${form.currency || 'USDT'}` : form.crypto || "—");
+
+      setText("payout-channel", form.payout_channel || form.payoutChannel || form.paymentMethod || "—");
+      setText("pay-name", form.payout_name || form.payoutName || form.accountName || user.name || "—");
+      setText("pay-number", form.payout_account || form.accountNumber || form.payoutAccount || form.paymentAccount || "—");
+      
+      // For Step 2, use the same logic - prefer amount_tzs for sell orders
+      let payoutAmountStep2 = form.amount_tzs || form.tzs;
+      if (!payoutAmountStep2) {
+        const payoutFromField = form.payout_amount || form.fiatAmount || form.amountFiat;
+        if (payoutFromField) {
+          const numPayout = Number(payoutFromField);
+          // If payout_amount is > 1000, it's likely TZS
+          if (numPayout > 1000) {
+            payoutAmountStep2 = payoutFromField;
+          }
+        }
+      }
+      
+      // Format with commas for readability in Step 2
+      const formattedPayoutAmount = payoutAmountStep2 ? Number(payoutAmountStep2).toLocaleString() : "—";
+      setText("pay-amount", formattedPayoutAmount !== "—" ? `${formattedPayoutAmount} TZS` : "—");
+
+      const proofSection = document.getElementById("proof-section");
+      const proofGrid = document.getElementById("proof-grid");
+      const receipts = Array.isArray(form.receipts) ? form.receipts.filter(Boolean) : [];
+      if (proofSection && proofGrid) {
+        proofGrid.innerHTML = "";
+        if (receipts.length) {
+          receipts.forEach((url, idx) => {
+            const anchor = document.createElement("a");
+            anchor.href = url;
+            anchor.target = "_blank";
+            anchor.rel = "noopener noreferrer";
+            anchor.className = "proof-thumb";
+
+            const img = document.createElement("img");
+            img.loading = "lazy";
+            img.src = url;
+            img.alt = `Transfer proof ${idx + 1}`;
+            anchor.appendChild(img);
+
+            const badge = document.createElement("span");
+            badge.textContent = `#${idx + 1}`;
+            anchor.appendChild(badge);
+
+            proofGrid.appendChild(anchor);
+          });
+          setText("proof-count", receipts.length);
+          proofSection.classList.remove("hidden");
+        } else {
+          proofSection.classList.add("hidden");
+        }
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", loadSubmission);
+
+    function applyReadonlyMode() {
+      const nextBtn = document.getElementById("next-btn");
+      const actionsRow = document.getElementById("actions-row");
+      const step2 = document.getElementById("step2");
+      if (nextBtn) nextBtn.classList.add("hidden");
+      if (actionsRow) actionsRow.classList.add("hidden");
+      if (step2) step2.classList.add("hidden");
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Buy Order</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #0a0f1f, #1a237e, #283593);
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      color: #fff;
+    }
+    .card {
+      border-radius: 20px;
+      padding: 40px;
+      width: min(520px, 100%);
+      background: linear-gradient(160deg, #0f172a, #1e293b, #2c3e50);
+      box-shadow: 0 0 30px rgba(0, 128, 255, 0.4), 0 0 15px rgba(255, 215, 0, 0.2);
+      border: 1px solid rgba(59, 130, 246, 0.5);
+      backdrop-filter: blur(12px);
+      transition: all 0.3s ease;
+    }
+    .card:hover {
+      transform: scale(1.02);
+      box-shadow: 0 0 45px rgba(59, 130, 246, 0.6), 0 0 25px rgba(255, 215, 0, 0.3);
+    }
+    .step-title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, #ffd700, #4fc3f7, #80ffdb);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 18px;
+      text-align: center;
+      letter-spacing: 1px;
+    }
+    .step-desc {
+      color: #facc15;
+      margin-bottom: 30px;
+      font-size: 1.05rem;
+      text-align: center;
+      font-weight: 500;
+    }
+    p {
+      margin: 10px 0;
+      font-size: 1.05rem;
+    }
+    .label {
+      font-weight: 600;
+      color: #4fc3f7;
+    }
+    .value {
+      color: #f9fafb;
+      font-weight: 500;
+    }
+    .value-amount {
+      color: #22c55e;
+      font-weight: 600;
+    }
+    .copy-btn {
+      margin-left: 10px;
+      background: rgba(79, 195, 247, 0.2);
+      border: 1px solid rgba(79, 195, 247, 0.4);
+      color: #e0f2fe;
+      padding: 5px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: 0.3s;
+    }
+    .copy-btn:hover {
+      background: rgba(79, 195, 247, 0.35);
+      transform: scale(1.05);
+    }
+    .btn {
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: 0.3s;
+      border: none;
+    }
+    .btn-blue {
+      background: linear-gradient(90deg, #00b4d8, #0077b6, #023e8a);
+      color: #fff;
+      box-shadow: 0 8px 25px rgba(0, 180, 216, 0.4);
+    }
+    .btn-blue:hover {
+      transform: scale(1.04);
+      box-shadow: 0 8px 35px rgba(0, 180, 216, 0.6);
+    }
+    .btn-red {
+      background: linear-gradient(90deg, #ef4444, #b91c1c);
+      color: #fff;
+      box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
+    }
+    .btn-red:hover {
+      transform: scale(1.04);
+      box-shadow: 0 8px 35px rgba(239, 68, 68, 0.6);
+    }
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      color: #e2e8f0;
+    }
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.25);
+      transform: scale(1.03);
+    }
+    .actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 30px;
+    }
+    .status-banner {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 0.9rem;
+      color: #cbd5f5;
+      margin-bottom: 18px;
+    }
+    .status-error {
+      border-color: rgba(239, 68, 68, 0.4);
+      color: #fecaca;
+      background: rgba(153, 27, 27, 0.2);
+    }
+    .hidden {
+      display: none !important;
+    }
+    .proof-section {
+      margin-top: 18px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(148, 163, 184, 0.15);
+    }
+    .proof-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .proof-thumb {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(79, 195, 247, 0.2);
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.4);
+    }
+    .proof-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+    .proof-thumb:hover img {
+      transform: scale(1.05);
+    }
+    .proof-thumb span {
+      position: absolute;
+      bottom: 6px;
+      right: 8px;
+      background: rgba(15, 23, 42, 0.8);
+      border-radius: 999px;
+      padding: 2px 8px;
+      font-size: 0.75rem;
+      color: #e0f2fe;
+      letter-spacing: 0.5px;
+    }
+    #step2 {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- STEP 1 -->
+  <div class="card" id="step1">
+    <h1 class="step-title">Confirm Buyer Payment</h1>
+    <p class="step-desc">Verify that the buyer’s payment has been received and details match before proceeding.</p>
+
+    <div id="status" class="status-banner">Loading order details…</div>
+
+    <p><span class="label">Order #:</span> <span id="order-number" class="value">—</span></p>
+    <p><span class="label">Buyer:</span> <span id="buyer-handle" class="value">—</span></p>
+    <p><span class="label">Verified Name:</span> <span id="buyer-name" class="value">—</span></p>
+    <p><span class="label">Email:</span> <span id="buyer-email" class="value">—</span></p>
+    <p><span class="label">Payment Method:</span> <span id="payment-method" class="value">—</span></p>
+    <p><span class="label">Fiat Amount:</span> <span id="fiat-amount" class="value-amount">—</span></p>
+
+    <div id="proof-section" class="proof-section hidden">
+      <p><span class="label">Payment Proofs:</span> <span id="proof-count" class="value">0</span></p>
+      <div id="proof-grid" class="proof-grid"></div>
+    </div>
+
+    <button class="btn btn-blue" id="next-btn" onclick="goToStep2()">
+      ✅ Payment Verified – Continue
+    </button>
+    </div>
+
+  <!-- STEP 2 -->
+  <div class="card" id="step2">
+    <h1 class="step-title">Send Crypto to Buyer</h1>
+    <p class="step-desc">Review the buyer’s platform details and release the crypto securely.</p>
+
+    <p><span class="label">Platform:</span> <span id="platform-name" class="value">—</span></p>
+    <p>
+      <span class="label">Platform UID:</span>
+      <span id="platform-uid" class="value">—</span>
+      <button class="copy-btn" data-copy="platform-uid">Copy</button>
+    </p>
+    <p>
+      <span class="label">Platform Email:</span>
+      <span id="platform-email" class="value">—</span>
+      <button class="copy-btn" data-copy="platform-email">Copy</button>
+    </p>
+    <p>
+      <span class="label">Amount to Send:</span>
+      <span id="crypto-amount" class="value-amount">—</span>
+      <button class="copy-btn" data-copy="crypto-amount">Copy</button>
+    </p>
+
+    <div class="actions" id="actions-row">
+      <button class="btn btn-red" id="complete-btn" onclick="completeOrder(this)">✅ Send Crypto Completed</button>
+      <button class="btn btn-secondary" onclick="backToStep1()">Back</button>
+    </div>
+  </div>
+
+  <script>
+    const state = {
+      submissionId: null,
+      submission: null,
+      readonly: false
+    };
+
+    function getCachedSubmission(id) {
+      try {
+        if (id) {
+          const raw = localStorage.getItem(`submission-preview-${id}`);
+          if (raw) {
+            return { id, data: JSON.parse(raw) };
+          }
+        }
+        const latestRaw = localStorage.getItem('submission-preview-latest');
+        if (latestRaw) {
+          const parsed = JSON.parse(latestRaw);
+          if (parsed && typeof parsed === 'object') {
+            return parsed;
+          }
+        }
+      } catch (err) {
+        console.warn('Failed to read cached submission', err);
+      }
+      return null;
+    }
+
+    function setStatus(message, isError = false) {
+      const statusEl = document.getElementById('status');
+      if (!statusEl) return;
+      statusEl.textContent = message;
+      statusEl.classList.toggle('status-error', isError);
+      statusEl.classList.toggle('hidden', !message);
+    }
+
+    function setText(id, value, fallback = '—') {
+      const el = document.getElementById(id);
+      if (el) el.textContent = value || fallback;
+    }
+
+    function goToStep2(){
+      if (state.readonly) return;
+      document.getElementById('step1').style.display='none';
+      document.getElementById('step2').style.display='block';
+    }
+    function backToStep1(){
+      document.getElementById('step2').style.display='none';
+      document.getElementById('step1').style.display='block';
+    }
+    function copyFromSpan(spanId){
+      const el = document.getElementById(spanId);
+      if (!el) return;
+      const text = el.textContent.trim();
+      if (!text || text === '—') {
+        alert('No data to copy yet.');
+        return;
+      }
+      navigator.clipboard.writeText(text).then(() => {
+        alert('Copied: ' + text);
+      }).catch(() => alert('Failed to copy.'));
+    }
+    async function completeOrder(btn){
+      if (state.readonly) {
+        alert('This order is archived and cannot be modified.');
+        return;
+      }
+      if (!state.submissionId) {
+        alert('Missing submission context.');
+        return;
+      }
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'Marking...';
+      }
+      try {
+        const res = await fetch('./api/submissions.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'mark_completed', submission_id: state.submissionId })
+        });
+        const data = await res.json();
+        if (!data.success) {
+          throw new Error(data.error || 'Failed to mark order completed');
+        }
+        alert('✅ Buy order completed and crypto released.');
+        window.location.href = 'admin/completed_orders.php';
+      } catch (error) {
+        console.error(error);
+        alert('Error marking order completed: ' + error.message);
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = '✅ Send Crypto Completed';
+        }
+      }
+    }
+
+    document.querySelectorAll('[data-copy]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.getAttribute('data-copy');
+        copyFromSpan(targetId);
+      });
+    });
+
+    async function loadSubmission() {
+      const params = new URLSearchParams(window.location.search);
+      let id = params.get('id');
+      let cached = getCachedSubmission(id || undefined);
+
+      if (params.has('readonly')) {
+        state.readonly = params.get('readonly') !== '0';
+      }
+
+      if (!id && cached) {
+        id = cached.id;
+      }
+
+      if (!id) {
+        setStatus('Missing submission id in URL and no cached data available.', true);
+        return;
+      }
+
+      state.submissionId = id;
+      try {
+        const res = await fetch(`./api/submissions.php?action=get_submission&id=${encodeURIComponent(id)}`);
+        if (!res.ok) throw new Error(`Request failed (${res.status})`);
+        const data = await res.json();
+        if (!data.success || !data.submission) throw new Error(data.error || 'Submission not found');
+        state.submission = data.submission;
+        populateSubmission(data.submission);
+        setStatus('');
+        if (state.readonly) {
+          setStatus('Viewing completed order (read only).');
+          applyReadonlyMode();
+        }
+      } catch (err) {
+        console.error(err);
+        if (cached && cached.data) {
+          setStatus(state.readonly ? 'Showing completed order (cached data).' : 'Showing cached submission data (live fetch failed).');
+          state.submission = cached.data;
+          populateSubmission(cached.data);
+          if (state.readonly) {
+            applyReadonlyMode();
+          }
+        } else {
+          setStatus(`Failed to load submission: ${err.message}`, true);
+        }
+      }
+    }
+
+    function populateSubmission(submission) {
+      const form = submission.form_data || {};
+      const user = submission.user_info || {};
+      const orderNumber = submission.order_number || submission.id;
+      setText('order-number', orderNumber);
+      setText('buyer-handle', user.name || form.name || '—');
+      setText('buyer-name', form.name || user.name || '—');
+      setText('buyer-email', user.email || form.email || '—');
+
+      const paymentPieces = [];
+      if (form.paymentMethod) paymentPieces.push(form.paymentMethod);
+      if (form.payment_method) paymentPieces.push(form.payment_method);
+      if (form.paymentAccount) paymentPieces.push(form.paymentAccount);
+      if (form.payment_account) paymentPieces.push(form.payment_account);
+      if (form.paymentNumber) paymentPieces.push(form.paymentNumber);
+      if (form.payment_number && !paymentPieces.includes(form.payment_number)) paymentPieces.push(form.payment_number);
+      setText('payment-method', paymentPieces.join(' • ') || form.payment || form.payment_method || '—');
+
+      let fiatAmount = '—';
+      if (form.amount_input) {
+        fiatAmount = form.amount_input_unit
+          ? `${form.amount_input} ${form.amount_input_unit}`
+          : form.amount_input;
+      } else if (form.amount && form.currency) {
+        fiatAmount = `${form.amount} ${form.currency}`;
+      } else if (form.amount) {
+        fiatAmount = form.amount;
+      }
+      setText('fiat-amount', fiatAmount);
+
+      setText('platform-name', form.platform || form.exchange || form.platform_name || '—');
+      setText('platform-uid', form.platformUid || form.platform_uid || form.uid || form.exchangeUid || form.exchange_uid || '—');
+      setText('platform-email', form.platform_email || form.platformEmail || form.email || user.email || '—');
+      const cryptoAmount = form.amount_usdt ?? form.cryptoAmount ?? form.amountCrypto ?? form.usdt ?? '';
+      const fallbackCrypto = form.crypto || form.crypto_amount || (form.amount_input_unit === 'USDT' ? form.amount_input : form.amount);
+      setText('crypto-amount', cryptoAmount ? `${cryptoAmount} USDT` : fallbackCrypto ? `${fallbackCrypto} ${form.amount_input_unit || form.currency || 'USDT'}` : '—');
+
+      const proofSection = document.getElementById('proof-section');
+      const proofGrid = document.getElementById('proof-grid');
+      const receipts = Array.isArray(form.receipts) ? form.receipts.filter(Boolean) : [];
+      if (proofSection && proofGrid) {
+        proofGrid.innerHTML = '';
+        if (receipts.length) {
+          receipts.forEach((url, idx) => {
+            const anchor = document.createElement('a');
+            anchor.href = url;
+            anchor.target = '_blank';
+            anchor.rel = 'noopener noreferrer';
+            anchor.className = 'proof-thumb';
+
+            const img = document.createElement('img');
+            img.loading = 'lazy';
+            img.src = url;
+            img.alt = `Payment proof ${idx + 1}`;
+            anchor.appendChild(img);
+
+            const badge = document.createElement('span');
+            badge.textContent = `#${idx + 1}`;
+            anchor.appendChild(badge);
+
+            proofGrid.appendChild(anchor);
+          });
+          setText('proof-count', receipts.length);
+          proofSection.classList.remove('hidden');
+        } else {
+          proofSection.classList.add('hidden');
+        }
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadSubmission);
+
+    function applyReadonlyMode() {
+      const nextBtn = document.getElementById('next-btn');
+      const actionsRow = document.getElementById('actions-row');
+      const step2 = document.getElementById('step2');
+      if (nextBtn) nextBtn.classList.add('hidden');
+      if (actionsRow) actionsRow.classList.add('hidden');
+      if (step2) step2.classList.add('hidden');
+    }
+  </script>
+</body>
+</html>

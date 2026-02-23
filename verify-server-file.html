@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Verify Server File</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #1a1a1a; color: #fff; }
+        .check { margin: 10px 0; padding: 10px; background: #2a2a2a; border-radius: 5px; }
+        .pass { color: #4ade80; }
+        .fail { color: #f87171; }
+        pre { background: #000; padding: 10px; border-radius: 5px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>Server File Verification</h1>
+    <p>This page checks if your server has the correct app.js file.</p>
+    
+    <div id="results"></div>
+    
+    <script>
+        async function verify() {
+            const results = document.getElementById('results');
+            results.innerHTML = '<p>Loading app.js file...</p>';
+            
+            try {
+                // Try both possible paths
+                const paths = [
+                    'dist/app.js',
+                    'jordan-production/dist/app.js'
+                ];
+                
+                let fileContent = '';
+                let usedPath = '';
+                
+                for (const path of paths) {
+                    try {
+                        const response = await fetch(path + '?v=' + Date.now());
+                        if (response.ok) {
+                            fileContent = await response.text();
+                            usedPath = path;
+                            break;
+                        }
+                    } catch (e) {
+                        continue;
+                    }
+                }
+                
+                if (!fileContent) {
+                    results.innerHTML = '<div class="check fail">❌ Could not load app.js from either path. Check file location.</div>';
+                    return;
+                }
+                
+                results.innerHTML = `<div class="check pass">✓ File loaded from: ${usedPath}</div>`;
+                
+                // Check 1: useMemo import
+                const hasUseMemo = fileContent.includes('useMemo') && 
+                                   fileContent.match(/const\s*\{\s*[^}]*useMemo[^}]*\}\s*=\s*React/);
+                results.innerHTML += `<div class="check ${hasUseMemo ? 'pass' : 'fail'}">
+                    ${hasUseMemo ? '✓' : '❌'} useMemo is imported in React imports
+                </div>`;
+                
+                // Check 2: WIZARD_BUY_PAYMENT_ACCOUNTS
+                const hasPaymentAccounts = fileContent.includes('WIZARD_BUY_PAYMENT_ACCOUNTS') &&
+                                          fileContent.includes('"NMB Bank": "42710015482"') &&
+                                          fileContent.includes('"M-Pesa": "701103"');
+                results.innerHTML += `<div class="check ${hasPaymentAccounts ? 'pass' : 'fail'}">
+                    ${hasPaymentAccounts ? '✓' : '❌'} WIZARD_BUY_PAYMENT_ACCOUNTS mapping exists with all payment methods
+                </div>`;
+                
+                // Check 3: Dynamic WIZARD_BUY_RECEIVER
+                const hasDynamicReceiver = fileContent.includes('WIZARD_BUY_RECEIVER = useMemo') &&
+                                         fileContent.includes('[wizardPayment]');
+                results.innerHTML += `<div class="check ${hasDynamicReceiver ? 'pass' : 'fail'}">
+                    ${hasDynamicReceiver ? '✓' : '❌'} WIZARD_BUY_RECEIVER uses useMemo with wizardPayment dependency
+                </div>`;
+                
+                // Check 4: No hardcoded account number in display
+                const hasHardcoded = fileContent.match(/Account Number.*0152961669100[^"]/);
+                results.innerHTML += `<div class="check ${!hasHardcoded ? 'pass' : 'fail'}">
+                    ${!hasHardcoded ? '✓' : '❌'} No hardcoded account number in display code
+                </div>`;
+                
+                // Show line numbers
+                const useMemoLine = fileContent.substring(0, fileContent.indexOf('useMemo')).split('\n').length;
+                const accountsLine = fileContent.substring(0, fileContent.indexOf('WIZARD_BUY_PAYMENT_ACCOUNTS')).split('\n').length;
+                
+                results.innerHTML += `<div class="check">
+                    <strong>File Info:</strong><br>
+                    - useMemo found around line: ${useMemoLine}<br>
+                    - WIZARD_BUY_PAYMENT_ACCOUNTS found around line: ${accountsLine}<br>
+                    - File size: ${(fileContent.length / 1024).toFixed(2)} KB
+                </div>`;
+                
+                if (hasUseMemo && hasPaymentAccounts && hasDynamicReceiver && !hasHardcoded) {
+                    results.innerHTML += '<div class="check pass" style="font-size: 18px; font-weight: bold; margin-top: 20px;">✅ ALL CHECKS PASSED! Your file is correct.</div>';
+                } else {
+                    results.innerHTML += '<div class="check fail" style="font-size: 18px; font-weight: bold; margin-top: 20px;">❌ FILE IS INCORRECT. Please re-upload the dist/app.js file.</div>';
+                }
+                
+            } catch (error) {
+                results.innerHTML = `<div class="check fail">Error: ${error.message}</div>`;
+            }
+        }
+        
+        verify();
+    </script>
+</body>
+</html>
+
