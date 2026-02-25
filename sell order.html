@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Loader Head -->
+    <link rel="preload" as="image" href="dist/assets/logo-icon.png">
+    <link rel="stylesheet" href="dist/css/loader.css">
+    
   <meta charset="UTF-8" />
   <title>Admin Seller Payout</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -172,6 +176,13 @@
   </style>
 </head>
 <body>
+    <!-- JORDAN P2P FULLSCREEN LOADER START -->
+    <div id="jordan-loader">
+        <img src="dist/assets/logo-icon.png" alt="Loading..." class="loader-logo">
+        <div class="loader-text">Securing your market access...</div>
+    </div>
+    <!-- JORDAN P2P FULLSCREEN LOADER END -->
+    
   <div class="card" id="step1">
     <h1 class="step-title">Confirm Seller Transfer</h1>
     <p class="step-desc">Verify that the seller’s crypto was received successfully before proceeding with payment.</p>
@@ -447,5 +458,7 @@
       if (step2) step2.classList.add("hidden");
     }
   </script>
-</body>
+
+    <script src="dist/js/loader.js" defer></script>
+    </body>
 </html>

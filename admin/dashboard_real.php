@@ -142,6 +142,10 @@ $data = $dashboard->getAnalyticsData($period);
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Loader Head -->
+    <link rel="preload" as="image" href="../dist/assets/logo-icon.png">
+    <link rel="stylesheet" href="../dist/css/loader.css">
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Analytics Dashboard - jordanmwinukatz P2P Trading</title>
@@ -172,9 +176,20 @@ $data = $dashboard->getAnalyticsData($period);
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body class="bg-black min-h-screen text-white">
+    <!-- JORDAN P2P FULLSCREEN LOADER START -->
+    <div id="jordan-loader">
+        <img src="../dist/assets/logo-icon.png" alt="Loading..." class="loader-logo">
+        <div class="loader-text">Securing your market access...</div>
+    </div>
+    <!-- JORDAN P2P FULLSCREEN LOADER END -->
+    
     <div class="min-h-screen">
         <!-- Mobile-Friendly Professional Header -->
         <header class="border-b border-white/10 shadow-2xl" style="background: linear-gradient(90deg, rgba(251,191,36,0.18), rgba(253,224,71,0.12), rgba(34,211,238,0.18));">
+    <!-- Loader Head -->
+    <link rel="preload" as="image" href="../dist/assets/logo-icon.png">
+    <link rel="stylesheet" href="../dist/css/loader.css">
+    
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex flex-col lg:flex-row lg:justify-between lg:items-center py-6 lg:py-8 space-y-4 lg:space-y-0">
                     <div class="flex items-center space-x-3 lg:space-x-4">
@@ -452,5 +467,7 @@ $data = $dashboard->getAnalyticsData($period);
             window.location.href = `?period=${period}`;
         });
     </script>
-</body>
+
+    <script src="../dist/js/loader.js" defer></script>
+    </body>
 </html>

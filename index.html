@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Loader Head -->
+    <link rel="preload" as="image" href="dist/assets/logo-icon.png">
+    <link rel="stylesheet" href="dist/css/loader.css">
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
@@ -15,10 +19,9 @@
     <meta name="revisit-after" content="7 days">
     <meta name="theme-color" content="#fbbf24">
     
-    <!-- Canonical URL -->
     <link rel="canonical" href="https://jordanmwinukatz.com/">
     
-    <!-- Favicon -->
+    <!-- Favicon -- >
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -108,6 +111,13 @@
     
 </head>
 <body>
+    <!-- JORDAN P2P FULLSCREEN LOADER START -->
+    <div id="jordan-loader">
+        <img src="dist/assets/logo-icon.png" alt="Loading..." class="loader-logo">
+        <div class="loader-text">Securing your market access...</div>
+    </div>
+    <!-- JORDAN P2P FULLSCREEN LOADER END -->
+    
     <div id="root">
         <div style="display: flex; align-items: center; justify-content: center; min-height: 100vh; background: #0b0b0c;">
             <div style="text-align: center;">
@@ -160,5 +170,7 @@
     }
     </script>
     <!--End of Tawk.to Script-->
-</body>
+
+    <script src="dist/js/loader.js" defer></script>
+    </body>
 </html>

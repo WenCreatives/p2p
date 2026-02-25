@@ -62,6 +62,10 @@ $conversionRate = $totalVisitors > 0 ? round(($completedCount / $totalVisitors) 
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Loader Head -->
+    <link rel="preload" as="image" href="../dist/assets/logo-icon.png">
+    <link rel="stylesheet" href="../dist/css/loader.css">
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - Jordan P2P</title>
@@ -105,9 +109,20 @@ $conversionRate = $totalVisitors > 0 ? round(($completedCount / $totalVisitors) 
     </style>
 </head>
 <body class="bg-black text-white min-h-screen">
+    <!-- JORDAN P2P FULLSCREEN LOADER START -->
+    <div id="jordan-loader">
+        <img src="../dist/assets/logo-icon.png" alt="Loading..." class="loader-logo">
+        <div class="loader-text">Securing your market access...</div>
+    </div>
+    <!-- JORDAN P2P FULLSCREEN LOADER END -->
+    
     <audio id="notifSound" src="assets/audio/mixkit-urgent-simple-tone-loop-2976.wav" preload="none"></audio>
     <!-- Header -->
     <header class="gradient-bg border-b border-white/10 sticky top-0 z-50">
+    <!-- Loader Head -->
+    <link rel="preload" as="image" href="../dist/assets/logo-icon.png">
+    <link rel="stylesheet" href="../dist/css/loader.css">
+    
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center space-x-4">
@@ -696,6 +711,8 @@ $conversionRate = $totalVisitors > 0 ? round(($completedCount / $totalVisitors) 
 
         document.addEventListener('DOMContentLoaded', loadP2PConfig);
     </script>
-</body>
+
+    <script src="../dist/js/loader.js" defer></script>
+    </body>
 </html>
 

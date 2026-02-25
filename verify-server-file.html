@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <!-- Loader Head -->
+    <link rel="preload" as="image" href="dist/assets/logo-icon.png">
+    <link rel="stylesheet" href="dist/css/loader.css">
+    
     <title>Verify Server File</title>
     <style>
         body { font-family: Arial, sans-serif; padding: 20px; background: #1a1a1a; color: #fff; }
@@ -11,6 +15,13 @@
     </style>
 </head>
 <body>
+    <!-- JORDAN P2P FULLSCREEN LOADER START -->
+    <div id="jordan-loader">
+        <img src="dist/assets/logo-icon.png" alt="Loading..." class="loader-logo">
+        <div class="loader-text">Securing your market access...</div>
+    </div>
+    <!-- JORDAN P2P FULLSCREEN LOADER END -->
+    
     <h1>Server File Verification</h1>
     <p>This page checks if your server has the correct app.js file.</p>
     
@@ -103,6 +114,8 @@
         
         verify();
     </script>
-</body>
+
+    <script src="dist/js/loader.js" defer></script>
+    </body>
 </html>
 

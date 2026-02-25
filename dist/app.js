@@ -54,7 +54,7 @@ const toNumeric = value => {
       document.head.appendChild(link);
     }
     link.href = FAVICON_URL;
-  } catch {}
+  } catch { }
 })();
 
 /* ---------- Minimal UI Primitives ---------- */
@@ -317,7 +317,7 @@ function App() {
     "Tigo Pesa": "557106",
     "Airtel Money": ""
   };
-  
+
   // Get receiver info based on selected payment method (reactive to wizardPayment changes)
   const WIZARD_BUY_RECEIVER = useMemo(function () {
     const paymentMethod = wizardPayment || "CRDB Bank";
@@ -378,12 +378,12 @@ function App() {
   const wizardSyncFromTZS = val => {
     setWizardTzs(val);
     const n = Number(val);
-    if (!Number.isNaN(n) && n >= 0) setWizardUsdt(val ? (n / wizardEffectiveRate).toFixed(2) : "");else setWizardUsdt("");
+    if (!Number.isNaN(n) && n >= 0) setWizardUsdt(val ? (n / wizardEffectiveRate).toFixed(2) : ""); else setWizardUsdt("");
   };
   const wizardSyncFromUSDT = val => {
     setWizardUsdt(val);
     const n = Number(val);
-    if (!Number.isNaN(n) && n >= 0) setWizardTzs(val ? String(Math.round(n * wizardEffectiveRate)) : "");else setWizardTzs("");
+    if (!Number.isNaN(n) && n >= 0) setWizardTzs(val ? String(Math.round(n * wizardEffectiveRate)) : ""); else setWizardTzs("");
   };
 
   // Paste functionality
@@ -482,7 +482,7 @@ function App() {
   };
   const wizardSubmit = async () => {
     console.log('wizardSubmit called', { authUser: !!authUser, isSubmitting, wizardFilesLength: wizardFiles?.length });
-    
+
     if (!authUser) {
       setAuthOpen(true);
       return;
@@ -504,7 +504,7 @@ function App() {
       alert('Please attach at least one payment proof image before submitting.');
       return;
     }
-    
+
     // Check if window.submissions exists
     if (!window.submissions || !window.submissions.trackOrderSubmission) {
       console.error('window.submissions is not available');
@@ -939,7 +939,7 @@ function App() {
           currentBuyCode = j.data.buyCode || currentBuyCode;
           currentSellCode = j.data.sellCode || currentSellCode;
         }
-      } catch {}
+      } catch { }
     }
     async function refreshUsdt() {
       try {
@@ -1165,7 +1165,7 @@ function App() {
   const savePaymentAccount = async (paymentMethod, accountName, accountNumber) => {
     if (!authUser || !authUser.id) return;
     if (!paymentMethod || !accountName || !accountNumber) return;
-    
+
     try {
       const res = await fetch('api/payment_accounts.php', {
         method: 'POST',
@@ -1224,7 +1224,7 @@ function App() {
     if (wizardStep === 4 && wizardPayment && wizardSide === "Sell" && wizardRoute === "stay") {
       const savedAccounts = wizardUserSavedAccounts[wizardPayment];
       const hasSaved = savedAccounts && Array.isArray(savedAccounts) && savedAccounts.length > 0;
-      
+
       // Auto-select "saved" mode if a saved account exists and no mode is selected yet
       if (!wizardSellAccMode && hasSaved) {
         setWizardSellAccMode("saved");
@@ -1236,7 +1236,7 @@ function App() {
           setWizardSellAccNumber(firstAccount.number || "");
         }
       }
-      
+
       // If mode is already "saved" but no account is selected, select the first one
       if (wizardSellAccMode === "saved" && hasSaved && !wizardSelectedSavedAccountId && savedAccounts[0]) {
         const firstAccount = savedAccounts[0];
@@ -1244,7 +1244,7 @@ function App() {
         setWizardSellAccName(firstAccount.name || "");
         setWizardSellAccNumber(firstAccount.number || "");
       }
-      
+
       // Update fields when selected account changes
       if (wizardSellAccMode === "saved" && hasSaved && wizardSelectedSavedAccountId) {
         const selectedAccount = savedAccounts.find(acc => acc.id === wizardSelectedSavedAccountId);
@@ -1265,10 +1265,10 @@ function App() {
     let err = "";
     if (wizardUnit === "TZS") {
       const n = Number(wizardTzs);
-      if (!n) err = "Enter TZS amount";else if (n < wizardTzsMin) err = `Minimum is ${fmt(wizardTzsMin)}/=`;else if (n > WIZARD_MAX_TZS) err = `Maximum is ${fmt(WIZARD_MAX_TZS)}/=`;
+      if (!n) err = "Enter TZS amount"; else if (n < wizardTzsMin) err = `Minimum is ${fmt(wizardTzsMin)}/=`; else if (n > WIZARD_MAX_TZS) err = `Maximum is ${fmt(WIZARD_MAX_TZS)}/=`;
     } else if (wizardUnit === "USDT") {
       const n = Number(wizardUsdt);
-      if (!n) err = "Enter USDT amount";else if (n < WIZARD_MIN_USDT) err = `Minimum is ${fmt(WIZARD_MIN_USDT)} USDT`;else if (n > WIZARD_MAX_USDT) err = `Maximum is ${fmt(WIZARD_MAX_USDT)} USDT`;
+      if (!n) err = "Enter USDT amount"; else if (n < WIZARD_MIN_USDT) err = `Minimum is ${fmt(WIZARD_MIN_USDT)} USDT`; else if (n > WIZARD_MAX_USDT) err = `Maximum is ${fmt(WIZARD_MAX_USDT)} USDT`;
     } else if (wizardStep === 3) {
       err = "Select Amount Unit";
     }
@@ -1651,9 +1651,9 @@ function App() {
     const savedAccounts = Array.isArray(wizardUserSavedAccounts[wizardPayment]) ? wizardUserSavedAccounts[wizardPayment] : [];
     const hasMultiple = savedAccounts.length > 1;
     const selectedAccount = savedAccounts.find(acc => acc.id === wizardSelectedSavedAccountId) || savedAccounts[0];
-    
+
     return /*#__PURE__*/React.createElement("div", {
-    className: "mt-3"
+      className: "mt-3"
     }, hasMultiple && /*#__PURE__*/React.createElement("div", {
       className: "mb-4"
     }, /*#__PURE__*/React.createElement("label", {
@@ -1674,29 +1674,29 @@ function App() {
       key: acc.id,
       value: acc.id
     }, savedAccounts.length > 1 ? `Account ${index + 1}: ${acc.name} - ${acc.number}` : `${acc.name} - ${acc.number}`)))), /*#__PURE__*/React.createElement("div", {
-    className: "mb-4"
-  }, /*#__PURE__*/React.createElement("label", {
-    className: "block text-sm font-bold mb-2"
-  }, "Account Name:"), /*#__PURE__*/React.createElement("input", {
-    type: "text",
-    className: "block w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-md text-white placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm",
-    placeholder: "Not set",
+      className: "mb-4"
+    }, /*#__PURE__*/React.createElement("label", {
+      className: "block text-sm font-bold mb-2"
+    }, "Account Name:"), /*#__PURE__*/React.createElement("input", {
+      type: "text",
+      className: "block w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-md text-white placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm",
+      placeholder: "Not set",
       value: selectedAccount?.name || "",
-    readOnly: true
-  })), /*#__PURE__*/React.createElement("div", {
-    className: "mb-4"
-  }, /*#__PURE__*/React.createElement("label", {
-    className: "block text-sm font-bold mb-2"
-  }, "Account / Wallet Number:"), /*#__PURE__*/React.createElement("input", {
-    type: "text",
-    className: "block w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-md text-white placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm",
-    placeholder: "Not set",
+      readOnly: true
+    })), /*#__PURE__*/React.createElement("div", {
+      className: "mb-4"
+    }, /*#__PURE__*/React.createElement("label", {
+      className: "block text-sm font-bold mb-2"
+    }, "Account / Wallet Number:"), /*#__PURE__*/React.createElement("input", {
+      type: "text",
+      className: "block w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-md text-white placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm",
+      placeholder: "Not set",
       value: selectedAccount?.number || "",
-    readOnly: true
+      readOnly: true
     })), selectedAccount ? /*#__PURE__*/React.createElement("div", {
-    className: "mt-2 text-xs opacity-80"
+      className: "mt-2 text-xs opacity-80"
     }, "Account ready. Click \"Next\" to continue.") : /*#__PURE__*/React.createElement("div", {
-    className: "mt-2 text-xs text-yellow-500"
+      className: "mt-2 text-xs text-yellow-500"
     }, "No saved details for this method. Please choose \"Enter New Account\"."));
   })(), wizardSellAccMode === "new" && /*#__PURE__*/React.createElement("div", {
     className: "mt-3"
@@ -2363,9 +2363,9 @@ function App() {
     const savedAccounts = Array.isArray(wizardUserSavedAccounts[wizardPayment]) ? wizardUserSavedAccounts[wizardPayment] : [];
     const hasMultiple = savedAccounts.length > 1;
     const selectedAccount = savedAccounts.find(acc => acc.id === wizardSelectedSavedAccountId) || savedAccounts[0];
-    
+
     return /*#__PURE__*/React.createElement("div", {
-    className: "mt-3"
+      className: "mt-3"
     }, hasMultiple && /*#__PURE__*/React.createElement("div", {
       className: "mb-4"
     }, /*#__PURE__*/React.createElement("label", {
@@ -2386,29 +2386,29 @@ function App() {
       key: acc.id,
       value: acc.id
     }, savedAccounts.length > 1 ? `Account ${index + 1}: ${acc.name} - ${acc.number}` : `${acc.name} - ${acc.number}`)))), /*#__PURE__*/React.createElement("div", {
-    className: "mb-4"
-  }, /*#__PURE__*/React.createElement("label", {
-    className: "block text-sm font-bold mb-2"
-  }, "Account Name:"), /*#__PURE__*/React.createElement("input", {
-    type: "text",
-    className: "block w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-md text-white placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm",
-    placeholder: "Not set",
+      className: "mb-4"
+    }, /*#__PURE__*/React.createElement("label", {
+      className: "block text-sm font-bold mb-2"
+    }, "Account Name:"), /*#__PURE__*/React.createElement("input", {
+      type: "text",
+      className: "block w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-md text-white placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm",
+      placeholder: "Not set",
       value: selectedAccount?.name || "",
-    readOnly: true
-  })), /*#__PURE__*/React.createElement("div", {
-    className: "mb-4"
-  }, /*#__PURE__*/React.createElement("label", {
-    className: "block text-sm font-bold mb-2"
-  }, "Account / Wallet Number:"), /*#__PURE__*/React.createElement("input", {
-    type: "text",
-    className: "block w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-md text-white placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm",
-    placeholder: "Not set",
+      readOnly: true
+    })), /*#__PURE__*/React.createElement("div", {
+      className: "mb-4"
+    }, /*#__PURE__*/React.createElement("label", {
+      className: "block text-sm font-bold mb-2"
+    }, "Account / Wallet Number:"), /*#__PURE__*/React.createElement("input", {
+      type: "text",
+      className: "block w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-md text-white placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm",
+      placeholder: "Not set",
       value: selectedAccount?.number || "",
-    readOnly: true
+      readOnly: true
     })), selectedAccount ? /*#__PURE__*/React.createElement("div", {
-    className: "mt-2 text-xs opacity-80"
+      className: "mt-2 text-xs opacity-80"
     }, "Account ready. Click \"Next\" to continue.") : /*#__PURE__*/React.createElement("div", {
-    className: "mt-2 text-xs text-yellow-500"
+      className: "mt-2 text-xs text-yellow-500"
     }, "No saved details for this method. Please choose \"Enter New Account\"."));
   })(), wizardSellAccMode === "new" && /*#__PURE__*/React.createElement("div", {
     className: "mt-3"
@@ -2627,9 +2627,9 @@ function App() {
     },
     disabled: wizardFiles.length === 0 || isSubmitting || wizardFinalSubmitted,
     onClick: (e) => {
-      console.log('Submit button clicked', { 
-        wizardFilesLength: wizardFiles.length, 
-        isSubmitting, 
+      console.log('Submit button clicked', {
+        wizardFilesLength: wizardFiles.length,
+        isSubmitting,
         wizardFinalSubmitted,
         disabled: wizardFiles.length === 0 || isSubmitting || wizardFinalSubmitted
       });
@@ -3019,7 +3019,7 @@ function App() {
               password: authForm.password
             })
           });
-          
+
           // Get response text first to handle JSON parsing errors
           const responseText = await res.text();
           let j;
@@ -3029,7 +3029,7 @@ function App() {
             console.error('JSON Parse Error:', parseError, 'Response:', responseText);
             throw new Error('Server returned an invalid response. Please try again. If the problem persists, the email may already be registered.');
           }
-          
+
           if (!j.success) throw new Error(j.error || 'Registration failed');
           setAuthUser(j.user);
           localStorage.setItem('authUser', JSON.stringify(j.user));

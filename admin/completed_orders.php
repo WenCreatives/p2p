@@ -60,6 +60,10 @@ foreach ($rows as $row) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Loader Head -->
+    <link rel="preload" as="image" href="../dist/assets/logo-icon.png">
+    <link rel="stylesheet" href="../dist/css/loader.css">
+    
     <meta charset="UTF-8">
     <title>Completed Orders - Jordan P2P Admin</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -67,7 +71,18 @@ foreach ($rows as $row) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="bg-slate-950 text-white min-h-screen">
+    <!-- JORDAN P2P FULLSCREEN LOADER START -->
+    <div id="jordan-loader">
+        <img src="../dist/assets/logo-icon.png" alt="Loading..." class="loader-logo">
+        <div class="loader-text">Securing your market access...</div>
+    </div>
+    <!-- JORDAN P2P FULLSCREEN LOADER END -->
+    
     <header class="border-b border-white/10 bg-slate-900/80 backdrop-blur">
+    <!-- Loader Head -->
+    <link rel="preload" as="image" href="../dist/assets/logo-icon.png">
+    <link rel="stylesheet" href="../dist/css/loader.css">
+    
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex items-center justify-between">
             <div class="flex items-center gap-3">
                 <div class="h-10 w-10 rounded-xl bg-emerald-500/15 border border-emerald-400/40 flex items-center justify-center">
@@ -201,6 +216,8 @@ foreach ($rows as $row) {
             </ul>
         </section>
     </main>
-</body>
+
+    <script src="../dist/js/loader.js" defer></script>
+    </body>
 </html>
 
